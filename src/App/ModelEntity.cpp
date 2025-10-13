@@ -46,7 +46,7 @@ bool ModelEntity::loadFromGLTF(const QString & filePath)
 
 	for (const auto & texture: model.textures)
 	{
-		if (texture.source >= 0 && texture.source < model.images.size())
+		if (texture.source >= 0 && texture.source < static_cast<int>(model.images.size()))
 		{
 			const auto & image = model.images[texture.source];
 
@@ -154,7 +154,7 @@ bool ModelEntity::loadFromGLTF(const QString & filePath)
 				}
 			}
 
-			if (primitive.material >= 0 && primitive.material < model.materials.size())
+			if (primitive.material >= 0 && primitive.material < static_cast<int>(model.materials.size()))
 			{
 				const auto & material = model.materials[primitive.material];
 				if (material.pbrMetallicRoughness.baseColorTexture.index >= 0)

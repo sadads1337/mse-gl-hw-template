@@ -32,7 +32,7 @@ public:
 	bool isVisible() const { return visible_; }
 	void setVisible(bool visible) { visible_ = visible; }
 
-	virtual void update(float deltaTime) {}
+	virtual void update(float /*deltaTime*/) {}
 
 	virtual void render(Camera * camera, const QVector3D & lightPos, const QVector3D & lightColor, OpenGLContextPtr context) = 0;
 

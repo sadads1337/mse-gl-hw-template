@@ -10,6 +10,8 @@
 #include <QScreen>
 #include <QVBoxLayout>
 
+#include <cmath>
+
 Window::Window() noexcept
 {
 	const auto formatFPS = [](const auto value) {
@@ -34,7 +36,7 @@ Window::Window() noexcept
 	connect(inputTimer_, &QTimer::timeout, this, &Window::processInput);
 	inputTimer_->start(16);
 
-	connect(this, &Window::updateUI, [=] {
+	connect(this, &Window::updateUI, [=, this] {
 		fps->setText(formatFPS(ui_.fps));
 	});
 }

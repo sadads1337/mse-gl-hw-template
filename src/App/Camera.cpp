@@ -76,7 +76,7 @@ void Camera::setPitch(float pitch)
 	updateCameraVectors();
 }
 
-void Camera::update(float deltaTime)
+void Camera::update(float /*deltaTime*/)
 {
 }
 

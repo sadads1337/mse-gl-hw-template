@@ -105,7 +105,7 @@ void SceneRenderer::collectRenderBatches(SceneGraph * scene, Camera * camera)
 	});
 }
 
-void SceneRenderer::sortBatches(Camera * camera)
+void SceneRenderer::sortBatches(Camera * /*camera*/)
 {
 	std::sort(renderBatches_.begin(), renderBatches_.end(),
 			  [](const RenderBatch & a, const RenderBatch & b) {
