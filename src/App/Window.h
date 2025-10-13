@@ -1,28 +1,39 @@
 #pragma once
 
+#include "Camera.h"
+#include "OpenGLContext.h"
+#include "SceneGraph.h"
+#include "SceneRenderer.h"
 #include <Base/GLWidget.hpp>
 
 #include <QElapsedTimer>
-#include <QMatrix4x4>
-#include <QOpenGLBuffer>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLTexture>
-#include <QOpenGLVertexArrayObject>
+#include <QSet>
+#include <QTimer>
 
 #include <functional>
 #include <memory>
 
+class ModelEntity;
+class SkyboxEntity;
+
 class Window final : public fgl::GLWidget
 {
 	Q_OBJECT
+
 public:
 	Window() noexcept;
 	~Window() override;
 
-public: // fgl::GLWidget
+public:// fgl::GLWidget
 	void onInit() override;
 	void onRender() override;
 	void onResize(size_t width, size_t height) override;
+
+protected:
+	void mousePressEvent(QMouseEvent * event) override;
+	void mouseMoveEvent(QMouseEvent * event) override;
+	void keyPressEvent(QKeyEvent * event) override;
+	void keyReleaseEvent(QKeyEvent * event) override;
 
 private:
 	class PerfomanceMetricsGuard final
@@ -43,23 +54,25 @@ private:
 
 private:
 	[[nodiscard]] PerfomanceMetricsGuard captureMetrics();
+	void processInput();
+	bool initializeScene();
 
 signals:
 	void updateUI();
 
 private:
-	GLint mvpUniform_ = -1;
+	OpenGLContextPtr openglContext_;
+	std::unique_ptr<Camera> camera_;
+	std::unique_ptr<SceneGraph> sceneGraph_;
+	std::unique_ptr<SceneRenderer> renderer_;
 
-	QOpenGLBuffer vbo_{QOpenGLBuffer::Type::VertexBuffer};
-	QOpenGLBuffer ibo_{QOpenGLBuffer::Type::IndexBuffer};
-	QOpenGLVertexArrayObject vao_;
+	bool firstMouse_{true};
+	QPoint lastMousePos_;
 
-	QMatrix4x4 model_;
-	QMatrix4x4 view_;
-	QMatrix4x4 projection_;
+	QSet<int> pressedKeys_;
 
-	std::unique_ptr<QOpenGLTexture> texture_;
-	std::unique_ptr<QOpenGLShaderProgram> program_;
+	QTimer * inputTimer_;
+	QElapsedTimer deltaTimer_;
 
 	QElapsedTimer timer_;
 	size_t frameCount_ = 0;
@@ -67,6 +80,4 @@ private:
 	struct {
 		size_t fps = 0;
 	} ui_;
-
-	bool animated_ = true;
 };
